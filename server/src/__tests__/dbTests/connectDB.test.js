@@ -24,18 +24,21 @@ describe("connectDB function", () => {
   });
 
   test("log an error message if the connection to MongoDB fails", async () => {
-    mongoose.connect.mockRejectedValueOnce();
+    const error = new Error("Connection Error");
+    const rejectPromise = jest.fn(() => Promise.reject(error));
+    mongoose.connect.mockImplementationOnce(rejectPromise);
   
-    await connectDB();
+    await expect(connectDB()).rejects.toThrow("Connection Error");
   
     expect(mongoose.connect).toHaveBeenCalledWith(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
   
-    expect(logError).toHaveBeenCalled();
-
+    expect(logError).toHaveBeenCalledWith(
+      "Error connecting to MongoDB:",
+      expect.any(Error) 
+    );
     expect(logInfo).not.toHaveBeenCalled();
   });
-  
 });
