@@ -39,7 +39,7 @@ export const login = async (req, res) => {
         // Create jwt token
         const token = jwt.sign(
           { userId: userFound._id.toString() },
-          "class45-group-c"
+         process.env.JWT_SECRET 
         );
 
         // Save token in cookie

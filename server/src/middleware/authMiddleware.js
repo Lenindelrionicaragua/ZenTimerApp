@@ -4,7 +4,7 @@ export const requireAuth = (req, res, next) => {
   const session = req.cookies.session;
 
   // Verify token which is in cookie value
-  jwt.verify(session, "class45-group-c", (err, data) => {
+  jwt.verify(session, process.env.JWT_SECRET, (err, data) => {
     if (err) {
       return res.sendStatus(403);
     }
