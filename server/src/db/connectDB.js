@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { logError, logInfo } from "../util/logging";
+import { logError, logInfo } from "../util/logging.js";
 
 const connectDB = () => {
   return new Promise((resolve, reject) => {

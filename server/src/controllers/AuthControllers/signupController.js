@@ -1,8 +1,7 @@
 import { logError } from "../../util/logging.js";
 import validationErrorMessage from "../../util/validationErrorMessage.js";
-import { validateUser } from "../../models/User.js";
-import User from "../../models/User.js";
-import InvitationCode from "../../models/InvitationCode.js";
+import { validateUser } from "../../models/user.js";
+import User from "../../models/user.js";
 
 export const signup = async (req, res) => {
   try {
@@ -18,16 +17,6 @@ export const signup = async (req, res) => {
       return;
     }
 
-    const isCodeExist =
-      (await InvitationCode.findByCode(user.invitationCode)) != null;
-
-    if (!isCodeExist) {
-      res
-        .status(400)
-        .json({ success: false, msg: "Invalid invitation code, try again" });
-      return;
-    }
-
     // Validate the presence of the 'password' field as well
     const errorList = validateUser(user, true);
     if (errorList.length > 0) {
@@ -40,7 +29,6 @@ export const signup = async (req, res) => {
 
     const newUser = await User.create(user);
     res.status(201).json({ success: true, user: newUser });
-    await InvitationCode.deleteByCode(user.invitationCode);
   } catch (error) {
     logError(error);
     res

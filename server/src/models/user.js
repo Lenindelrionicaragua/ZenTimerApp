@@ -6,8 +6,8 @@ import { logInfo } from "../util/logging.js";
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   email: { type: String, required: true, unique: true, trim: true },
-  password: { type: String, required: true },
-  invitationCode: { type: String, required: true },
+  password: { type: String, required: true, trim: true },
+  dateOfBirth: { type: String, required: true, trim: true },
 });
 
 export const validateUser = (
@@ -15,10 +15,10 @@ export const validateUser = (
   requirePassword = true,
   requireName = true,
   requireEmail = true,
-  requireInvitationCode = true
+  requireDateOfBirth = true
 ) => {
   const errorList = [];
-  const allowedKeys = ["name", "email", "password", "invitationCode"];
+  const allowedKeys = ["name", "email", "password", "dateOfBirth"];
 
   const validatedKeysMessage = validateAllowedFields(userObject, allowedKeys);
 
@@ -40,7 +40,7 @@ export const validateUser = (
     errorList.push("password is a required field");
     logInfo("User create Validation failed: Password is required");
   }
-  if (requireInvitationCode && userObject.invitationCode == null) {
+  if (requireDateOfBirth && userObject.dateOfBirth == null) {
     errorList.push("invitationCode is a required field");
     logInfo("User create Validation failed: Invitation Code is required");
   }
