@@ -3,8 +3,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { requireAuth } from "./middleware/authMiddleware.js";
-import userRouter from "./routes/user.js";
-import authRouter from "./routes/auth.js";
+import userRouter from "./routes/userRoutes.js";
+import authRouter from "./routes/authRoutes.js";
 
 dotenv.config();
 

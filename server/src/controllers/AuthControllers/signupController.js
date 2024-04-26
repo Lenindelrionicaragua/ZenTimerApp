@@ -1,7 +1,7 @@
 import { logError } from "../../util/logging.js";
 import validationErrorMessage from "../../util/validationErrorMessage.js";
-import { validateUser } from "../../models/user.js";
-import User from "../../models/user.js";
+import { validateUser } from "../../models/userModels.js";
+import User from "../../models/userModels.js";
 
 export const signup = async (req, res) => {
   try {

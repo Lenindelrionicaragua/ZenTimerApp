@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import User, { validateUser } from "./models/user.js";
+import User, { validateUser } from "./models/userModels.js";
 
 import { logError } from "./util/logging.js";
 import validationErrorMessage from "./util/validationErrorMessage.js";

@@ -1,4 +1,4 @@
-import User from "../models/user.js";
+import User from "../models/userModels.js";
 import { logError } from "../util/logging.js";
 
 export const getUsers = async (req, res) => {
