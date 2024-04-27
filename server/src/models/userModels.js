@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   dateOfBirth: { type: String, required: true, trim: true },
 });
 
+// Signup validation.
 export const validateUser = (
   userObject,
   requirePassword = true,

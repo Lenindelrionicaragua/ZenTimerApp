@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken";
 
 export const login = async (req, res) => {
   const { user } = req.body;
+   
+  logInfo(`test is calling`);
 
   // Validation Errors
 
@@ -36,6 +38,7 @@ export const login = async (req, res) => {
       logInfo(`Is password valid? ${isPasswordValid}`);
 
       if (isPasswordValid) {
+        logInfo(`Password is valid for user: ${userFound.email}`);
         // Create jwt token
         const token = jwt.sign(
           { userId: userFound._id.toString() },
@@ -49,9 +52,11 @@ export const login = async (req, res) => {
           sameSite: "lax",
         });
 
+       
         res.status(200).json({
           success: true,
           msg: "Login successful",
+          token,
           user: {
             id: userFound._id,
             email: userFound.email,

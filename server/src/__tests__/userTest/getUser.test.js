@@ -1,12 +1,11 @@
 import supertest from "supertest";
-
 import {
   connectToMockDB,
   closeMockDatabase,
   clearMockDatabase,
-} from "../__testUtils__/dbMock.js";
-import { addUserToMockDB } from "../__testUtils__/userMocks.js";
-import app from "../app.js";
+} from "../../__testUtils__/dbMock.js";
+import { addUserToMockDB } from "../../__testUtils__/userMocks.js";
+import app from "../../app.js";
 
 const request = supertest(app);
 
@@ -22,10 +21,10 @@ afterAll(async () => {
   await closeMockDatabase();
 });
 
-describe("GET /api/user/", () => {
+describe("GET /api/test/user/", () => {
   it("Should return an empty array if there are no users in the db", (done) => {
     request
-      .get("/api/user/")
+      .get("/api/test/user/")
       .then((response) => {
         expect(response.status).toBe(200);
 
@@ -48,7 +47,7 @@ describe("GET /api/user/", () => {
     await addUserToMockDB(testUser2);
 
     // Asynchronous tests should return a Promise
-    return request.get("/api/user/").then((response) => {
+    return request.get("/api/test/user/").then((response) => {
       expect(response.status).toBe(200);
 
       const { body } = response;

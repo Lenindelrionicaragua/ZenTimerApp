@@ -29,7 +29,8 @@ app.use(cookieParser());
  */
 
 app.use("/api/auth", authRouter);
-// app.use("/api/user", requireAuth, userRouter);
-app.use("/api/user", userRouter);
+app.use("/api/user", requireAuth, userRouter);
+app.use("/api/test/user", userRouter);
+// app.use("/api/user", userRouter);
 
 export default app;

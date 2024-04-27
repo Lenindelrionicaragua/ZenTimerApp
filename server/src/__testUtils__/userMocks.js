@@ -12,6 +12,7 @@ export const addUserToMockDB = async (newUser) => {
   }
 
   const user = new User(newUser);
+
   await user.save();
 };
 
