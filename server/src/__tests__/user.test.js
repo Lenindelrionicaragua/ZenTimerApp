@@ -5,8 +5,8 @@ import {
   closeMockDatabase,
   clearMockDatabase,
 } from "../__testUtils__/dbMock.js";
+import { addUserToMockDB } from "../__testUtils__/userMocks.js";
 import app from "../app.js";
-import { findUserInMockDB } from "../__testUtils__/userMocks.js";
 
 const request = supertest(app);
 
@@ -22,110 +22,52 @@ afterAll(async () => {
   await closeMockDatabase();
 });
 
-const testUserBase = { name: "John", email: "john@doe.com" };
-
-describe("POST /api/user/create", () => {
-  it("Should return a bad request if no user object is given", (done) => {
+describe("GET /api/user/", () => {
+  it("Should return an empty array if there are no users in the db", (done) => {
     request
-      .post("/api/user/create")
+      .get("/api/user/")
       .then((response) => {
-        expect(response.status).toBe(400);
-
-        const { body } = response;
-        expect(body.success).toBe(false);
-        // Check that there is an error message
-        expect(body.msg.length).not.toBe(0);
-
-        done();
-      })
-      .catch((err) => {
-        done(err);
-      });
-  });
-
-  it("Should return a bad request if the user object does not have a name", (done) => {
-    const testUser = { email: testUserBase.email };
-
-    request
-      .post("/api/user/create")
-      .send({ user: testUser })
-      .then((response) => {
-        expect(response.status).toBe(400);
-
-        const { body } = response;
-        expect(body.success).toBe(false);
-        // Check that there is an error message
-        expect(body.msg.length).not.toBe(0);
-
-        done();
-      })
-      .catch((err) => {
-        done(err);
-      });
-  });
-
-  it("Should return a bad request if the user object does not have an email", (done) => {
-    const testUser = { name: testUserBase.name };
-
-    request
-      .post("/api/user/create")
-      .send({ user: testUser })
-      .then((response) => {
-        expect(response.status).toBe(400);
-
-        const { body } = response;
-        expect(body.success).toBe(false);
-        // Check that there is an error message
-        expect(body.msg.length).not.toBe(0);
-
-        done();
-      })
-      .catch((err) => {
-        done(err);
-      });
-  });
-
-  it("Should return a bad request if the user object has extra fields", (done) => {
-    const testUser = { ...testUserBase, foo: "bar" };
-
-    request
-      .post("/api/user/create")
-      .send({ user: testUser })
-      .then((response) => {
-        expect(response.status).toBe(400);
-
-        const { body } = response;
-        expect(body.success).toBe(false);
-        // Check that there is an error message
-        expect(body.msg.length).not.toBe(0);
-
-        done();
-      })
-      .catch((err) => {
-        done(err);
-      });
-  });
-
-  it("Should return a success state if a correct user is given", async () => {
-    const testUser = { ...testUserBase };
-
-    return request
-      .post("/api/user/create")
-      .send({ user: testUser })
-      .then((response) => {
-        expect(response.status).toBe(201);
+        expect(response.status).toBe(200);
 
         const { body } = response;
         expect(body.success).toBe(true);
-        expect(body.user.name).toEqual(testUser.name);
-        expect(body.user.email).toEqual(testUser.email);
+        expect(body.result).toEqual([]);
 
-        // Check that it was added to the DB
-        return findUserInMockDB(body.user._id);
+        done();
       })
-      .then((userInDb) => {
-        expect(userInDb.name).toEqual(testUser.name);
-        expect(userInDb.email).toEqual(testUser.email);
+      .catch((err) => {
+        done(err);
       });
+  });
+
+  it("Should return all the users in the db", async () => {
+    const testUser1 =  { name: "John", email: "john@doe.com", password: "sodaStereo", dateOfBirth: "Tue Feb 01 1984" };
+    const testUser2 = { name: "Jane", email: "jane@doe.com", password: "caifanes", dateOfBirth: "Tue Feb 03 1994" };
+
+    await addUserToMockDB(testUser1);
+    await addUserToMockDB(testUser2);
+
+    // Asynchronous tests should return a Promise
+    return request.get("/api/user/").then((response) => {
+      expect(response.status).toBe(200);
+
+      const { body } = response;
+      expect(body.success).toBe(true);
+
+      const users = body.result;
+      expect(users).toHaveLength(2);
+      expect(users.filter((user) => user.name === testUser1.name)).toHaveLength(
+        1
+      );
+      expect(
+        users.filter((user) => user.email === testUser1.email)
+      ).toHaveLength(1);
+      expect(users.filter((user) => user.name === testUser2.name)).toHaveLength(
+        1
+      );
+      expect(
+        users.filter((user) => user.email === testUser2.email)
+      ).toHaveLength(1);
+    });
   });
 });
