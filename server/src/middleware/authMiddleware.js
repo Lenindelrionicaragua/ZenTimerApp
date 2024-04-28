@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { logInfo, logError } from "../util/logging.js";
-import { login } from "../controllers/AuthControllers/loginController.js";
+
 
 export const requireAuth = (req, res, next) => {
   const session = req.cookies.session;

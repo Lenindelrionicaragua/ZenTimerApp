@@ -1,15 +1,29 @@
-import { logInfo } from "../../util/logging.js";
-import validationErrorMessage from "../../util/validationErrorMessage.js";
-import User from "../../models/userModels.js";
-import bcrypt from "bcrypt";
+import { logInfo } from "../../../server/src/util/logging.js";
+import validationErrorMessage from "../../../server/src/util/validationErrorMessage.js";
 import jwt from "jsonwebtoken";
 
-export const login = async (req, res) => {
+const users = [
+  {
+    _id: "1",
+    name: "Jane",
+    email: "jane@example.com",
+    password: "password123" 
+  },
+  {
+    _id: "2",
+    name: "John",
+    email: "john@example.com",
+    password: "password123" 
+  }
+];
+
+export const loginMock = async (req, res) => {
   const { user } = req.body;
-   
-  // Validation Errors
+
+  logInfo(`test is calling to the loginControllerMock`);
 
   try {
+    // Validation Errors
     const errors = [];
     if (!user.email || !user.password) {
       errors.push("Email and password are required.");
@@ -20,39 +34,25 @@ export const login = async (req, res) => {
       res.status(400).json({ success: false, error: errorMessage });
       return;
     }
-    
-    // Continue with the login process if there are no validation errors
-    const userFound = await User.findOne({ email: user.email });
 
-    logInfo(`User does not exist`);
+    const userFound = users.find(u => u.email === user.email);
 
     if (userFound) {
       logInfo(`User found: ${JSON.stringify(userFound)}`);
 
-      const isPasswordValid = await bcrypt.compare(
-        user.password,
-        userFound.password
-      );
-
-      // After the comparison
-      logInfo(`Is password valid? ${isPasswordValid}`);
-
-      if (isPasswordValid) {
+      if (user.password === userFound.password) {
         logInfo(`Password is valid for user: ${userFound.email}`);
-        // Create jwt token
         const token = jwt.sign(
           { userId: userFound._id.toString() },
-         process.env.JWT_SECRET 
+          process.env.JWT_SECRET
         );
 
-        // Save token in cookie
         res.cookie("session", token, {
           maxAge: 86400000,
           httpOnly: true,
           sameSite: "lax",
         });
 
-       
         res.status(200).json({
           success: true,
           msg: "Login successful",
@@ -67,7 +67,8 @@ export const login = async (req, res) => {
         res.status(401).json({ success: false, msg: "Incorrect password" });
       }
     } else {
-      res.status(401).json({ success: false, msg: "User not found" });
+      logInfo(`User not found in loginControllerMock`);
+      res.status(401).json({ success: false, msg: "User not found" }); 
     }
   } catch (error) {
     res.status(500).json({ success: false, msg: "Internal server error" });

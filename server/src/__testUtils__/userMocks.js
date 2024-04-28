@@ -16,14 +16,17 @@ export const addUserToMockDB = async (newUser) => {
   await user.save();
 };
 
-export const findUserInMockDB = async (userId) => {
-  if (typeof userId !== "string") {
+export const findUserInMockDB = async (email) => {
+  if (typeof email !== "string") {
     throw new Error(
-      `Invalid userId given! Should be a string, but received: ${userId}`
+      `Invalid userId given! Should be a string, but received: ${email}`
     );
   }
 
-  const user = await User.findById(userId);
+  const user = await User.findOne({ email });
+  
+  const passwordHash = user ? user.password : null;
 
-  return user;
+  return { user, passwordHash };
 };
+
