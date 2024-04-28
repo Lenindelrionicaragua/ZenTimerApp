@@ -4,9 +4,9 @@ import {
   connectToMockDB,
   closeMockDatabase,
   clearMockDatabase,
-} from "../__testUtils__/dbMock.js";
-import app from "../app.js";
-import { findUserInMockDB } from "../__testUtils__/userMocks.js";
+} from "../../__testUtils__/dbMock.js";
+import app from "../../app.js";
+import { findUserInMockDB } from "../../__testUtils__/userMocks.js";
 
 const request = supertest(app);
 
@@ -22,12 +22,12 @@ afterAll(async () => {
   await closeMockDatabase();
 });
 
-const testUserBase = { name: "John", email: "john@doe.com" };
+const testUserBase = { name: "John", email: "john@doe.com", password: "sodaStereo", dateOfBirth: "Tue Feb 01 2022" };
 
-describe("POST /api/user/create", () => {
+describe("POST /api/auth/sign-up", () => {
   it("Should return a bad request if no user object is given", (done) => {
     request
-      .post("/api/user/create")
+      .post("/api/auth/sign-up")
       .then((response) => {
         expect(response.status).toBe(400);
 
@@ -47,7 +47,7 @@ describe("POST /api/user/create", () => {
     const testUser = { email: testUserBase.email };
 
     request
-      .post("/api/user/create")
+      .post("/api/auth/sign-up")
       .send({ user: testUser })
       .then((response) => {
         expect(response.status).toBe(400);
@@ -68,7 +68,7 @@ describe("POST /api/user/create", () => {
     const testUser = { name: testUserBase.name };
 
     request
-      .post("/api/user/create")
+      .post("/api/auth/sign-up")
       .send({ user: testUser })
       .then((response) => {
         expect(response.status).toBe(400);
@@ -89,7 +89,7 @@ describe("POST /api/user/create", () => {
     const testUser = { ...testUserBase, foo: "bar" };
 
     request
-      .post("/api/user/create")
+      .post("/api/auth/sign-up")
       .send({ user: testUser })
       .then((response) => {
         expect(response.status).toBe(400);
@@ -110,7 +110,7 @@ describe("POST /api/user/create", () => {
     const testUser = { ...testUserBase };
 
     return request
-      .post("/api/user/create")
+      .post("/api/auth/sign-up")
       .send({ user: testUser })
       .then((response) => {
         expect(response.status).toBe(201);

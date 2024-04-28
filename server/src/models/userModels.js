@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   dateOfBirth: { type: String, required: true, trim: true },
 });
 
+// Signup validation.
 export const validateUser = (
   userObject,
   requirePassword = true,
@@ -41,8 +42,8 @@ export const validateUser = (
     logInfo("User create Validation failed: Password is required");
   }
   if (requireDateOfBirth && userObject.dateOfBirth == null) {
-    errorList.push("invitationCode is a required field");
-    logInfo("User create Validation failed: Invitation Code is required");
+    errorList.push("Date Of Birth is a required field");
+    logInfo("User create Validation failed: Date Of Birth is required");
   }
 
   return errorList;
