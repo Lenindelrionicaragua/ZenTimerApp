@@ -1,6 +1,6 @@
 /**
- * In our models we will have validation checkers that should return an array of error messages.
- * This function creates a nice message for the user of our API saying what is wrong.
+ * In our models, we will have validation checkers that should return an array of error messages.
+ * This function creates a user-friendly message for the API user, indicating what is wrong.
  */
 
 // errorList should be an array of strings
@@ -9,3 +9,4 @@ const validationErrorMessage = (errorList) => {
 };
 
 export default validationErrorMessage;
+

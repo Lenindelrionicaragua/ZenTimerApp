@@ -4,11 +4,46 @@ import validateAllowedFields from "../util/validateAllowedFields.js";
 import { logInfo } from "../util/logging.js";
 
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  email: { type: String, required: true, unique: true, trim: true },
-  password: { type: String, required: true, trim: true },
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: {
+      validator: function(v) {
+        // Validate that the name does not contain special characters
+        return /^[a-zA-Z0-9 ]*$/.test(v);
+      },
+      message: props => `${props.value} contains invalid characters in the username.`
+    }
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    validate: {
+      validator: function(v) {
+        // Validate email format
+        return /\S+@\S+\.\S+/.test(v);
+      },
+      message: props => `${props.value} is not a valid email address.`
+    }
+  },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: {
+      validator: function(v) {
+        // Validate that the password contains at least one digit, one uppercase letter, one lowercase letter, and one special character
+        return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+}{"':;?/>.<,]).{8,}$/.test(v);
+      },
+      message: props => `The password must be at least 8 characters long, including at least one digit, one uppercase letter, one lowercase letter, and one special character.`
+    }
+  },
   dateOfBirth: { type: String, required: true, trim: true },
 });
+
 
 // Signup validation.
 export const validateUser = (

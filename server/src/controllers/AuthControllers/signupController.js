@@ -18,12 +18,9 @@ export const signup = async (req, res) => {
     }
 
     // Validate the presence of the 'password' field as well
-    const errorList = validateUser (user, true);
+    const errorList = validateUser(user, true);
     if (errorList.length > 0) {
-      res
-        .status(400)
-        .json({ success: false, msg: validationErrorMessage(errorList) });
-
+      res.status(400).json({ success: false, msg: validationErrorMessage(errorList) });
       return;
     }
 

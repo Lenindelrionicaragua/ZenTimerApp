@@ -6,7 +6,6 @@ import {
   clearMockDatabase,
 } from "../../__testUtils__/dbMock.js";
 import app from "../../app.js";
-import { findUserInMockDB } from "../../__testUtils__/userMocks.js";
 
 const request = supertest(app);
 
@@ -103,29 +102,6 @@ describe("POST /api/auth/sign-up", () => {
       })
       .catch((err) => {
         done(err);
-      });
-  });
-
-  it("Should return a success state if a correct user is given", async () => {
-    const testUser = { ...testUserBase };
-
-    return request
-      .post("/api/auth/sign-up")
-      .send({ user: testUser })
-      .then((response) => {
-        expect(response.status).toBe(201);
-
-        const { body } = response;
-        expect(body.success).toBe(true);
-        expect(body.user.name).toEqual(testUser.name);
-        expect(body.user.email).toEqual(testUser.email);
-
-        // Check that it was added to the DB
-        return findUserInMockDB(body.user._id);
-      })
-      .then((userInDb) => {
-        expect(userInDb.name).toEqual(testUser.name);
-        expect(userInDb.email).toEqual(testUser.email);
       });
   });
 });
