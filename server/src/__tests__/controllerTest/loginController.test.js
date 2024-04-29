@@ -64,3 +64,6 @@ describe('loginController', () => {
     expect(response.body.msg).toBe('Login successful');
   });
 });
+
+// Bugs
+// 1 - Should fail if the request is given with a empty object
