@@ -46,12 +46,27 @@ export const validateUser = (
     logInfo("User create Validation failed: Email is not in a valid format");
   }
   
-  if (requirePassword && userObject.password == null) {
+  if (requirePassword && (userObject.password == null || userObject.password === "")) {
     errorList.push("Password is a required field");
     logInfo("User create Validation failed: Password is required field");
   }
 
-  if (requireDateOfBirth && userObject.dateOfBirth == null) {
+  if (requirePassword && (!userObject.password || userObject.password.length < 8)) {
+    errorList.push("Password must be at least 8 characters long");
+    logInfo("User create Validation failed: Password must be at least 8 characters long");
+  }
+
+  if (requirePassword && !/[A-Z]/.test(userObject.password)) {
+    errorList.push("Password must contain at least one uppercase letter");
+    logInfo("User create Validation failed: Password must contain at least one uppercase letter");
+  }
+
+  if (requirePassword && !/[^A-Za-z0-9]/.test(userObject.password)) {
+    errorList.push("Password must contain at least one special character");
+    logInfo("User create Validation failed: Password must contain at least one special character");
+  }
+
+  if (requireDateOfBirth && userObject.dateOfBirth == null || userObject.dateOfBirth == "") {
     errorList.push("Date Of Birth is a required field");
     logInfo("User create Validation failed: Date Of Birth is required field");
   }
