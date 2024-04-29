@@ -7,14 +7,16 @@ export const signup = async (req, res) => {
   try {
     const { user } = req.body;
 
+    if (user.password !== confirmPassword) {
+      return res.status(400).json({ success: false, msg: "Passwords do not match" });
+    }
+
+ 
     if (typeof user !== "object") {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
-        msg: `You need to provide a 'user' object. Received: ${JSON.stringify(
-          user
-        )}`,
+        msg: `You need to provide a 'user' object. Received: ${JSON.stringify(user)}`,
       });
-      return;
     }
 
     // Validate the presence of the 'password' field as well

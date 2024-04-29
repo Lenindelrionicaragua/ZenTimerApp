@@ -27,25 +27,30 @@ export const validateUser = (
   }
 
   if (requireName && userObject.name == null || userObject.name == "") {
-    errorList.push("name is a required field");
+    errorList.push("Name is a required field");
     logInfo("user Create Validation failed: Name is required field");
   }
 
-  if (requireName && !/^[a-zA-Z0-9]+$/.test(userObject.name)) {
-    errorList.push("name can only contain letters and numbers, with no spaces");
-    logInfo("user Create Validation failed: Name can only contain letters and numbers, with no spaces");
+  if (requireName && !/^(?:[a-zA-Z0-9]+(?:\s+[a-zA-Z0-9]+)*)?$/.test(userObject.name)) {
+    errorList.push("Name can only contain letters, numbers, and a single space between words");
+    logInfo("User create Validation failed: Name can only contain letters, numbers, and a single space between words");
   }
 
-  if (requireEmail && userObject.email == null) {
-    errorList.push("email is a required field");
+  if (requireEmail && userObject.email == null || userObject.email == "") {
+    errorList.push("Email is a required field");
     logInfo("User create Validation failed: Email is required field");
   }
 
-  if (requirePassword && userObject.password == null) {
-    errorList.push("password is a required field");
-    logInfo("User create Validation failed: Password is required field");
+  if (requireEmail && !/^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(userObject.email)) {
+    errorList.push("Email is not in a valid format");
+    logInfo("User create Validation failed: Email is not in a valid format");
   }
   
+  if (requirePassword && userObject.password == null) {
+    errorList.push("Password is a required field");
+    logInfo("User create Validation failed: Password is required field");
+  }
+
   if (requireDateOfBirth && userObject.dateOfBirth == null) {
     errorList.push("Date Of Birth is a required field");
     logInfo("User create Validation failed: Date Of Birth is required field");
