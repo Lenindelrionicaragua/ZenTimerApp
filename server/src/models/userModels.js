@@ -41,7 +41,7 @@ export const validateUser = (
     logInfo("User create Validation failed: Email is required field");
   }
 
-  if (requireEmail && !/^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(userObject.email)) {
+  if (requireEmail && !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(userObject.email)) {
     errorList.push("Email is not in a valid format");
     logInfo("User create Validation failed: Email is not in a valid format");
   }
