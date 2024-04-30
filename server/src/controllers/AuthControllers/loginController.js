@@ -5,6 +5,11 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const login = async (req, res) => {
+ // Check if the request body contains user information
+ if (!req.body || typeof req.body !== "object" || !req.body.user) {
+  return res.status(400).json({ success: false, msg: "Invalid request body" }); // Update error message here
+ } 
+
   const { user } = req.body;
    
   // Validation Errors
