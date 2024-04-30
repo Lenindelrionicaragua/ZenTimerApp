@@ -82,7 +82,7 @@ userSchema.pre("save", async function (next) {
       this.password = await bcrypt.hash(this.password, salt);
 
       // Log to verify that the password is hashed successfully
-      logInfo(`Password hashed successfully for user: ${this.email}`);
+      logInfo(`Password hashed successfully for user: ${this.email}. Hash: ${this.password}`);
 
       next();
     } catch (error) {
