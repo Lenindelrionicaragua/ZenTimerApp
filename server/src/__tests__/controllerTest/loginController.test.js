@@ -1,6 +1,7 @@
 import supertest from 'supertest';
 import app from "../../app.js";
 
+// tested with loginControllerMock.js because we are not testing the real DB and neither the bycryt dependenci only de loginController code
 const request = supertest(app);
 
 describe('loginController', () => {
@@ -49,21 +50,14 @@ describe('loginController', () => {
     expect(response.body.msg).toBe('Incorrect password');
   });
 
-  test('Should pass if the request contain a valid email and password', async () => {
-    const userData2 = {
-      email: "john@example.com",
-      password: "password123" 
-    };
-
+  test('Should fail if the request is given with a empty object', async () => {
     const response = await request
       .post('/api/test/log-in-mock')
-      .send({ user: userData2 });
+      .send({ user: null });
 
-    expect(response.status).toBe(200);
-    expect(response.body.success).toBe(true);
-    expect(response.body.msg).toBe('Login successful');
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
+    expect(response.body.msg).toBe('Invalid request body');
   });
 });
 
-// Bugs
-// 1 - Should fail if the request is given with a empty object
