@@ -21,7 +21,12 @@ afterAll(async () => {
   await closeMockDatabase();
 });
 
-const testUserBase = { name: "John", email: "john@doe.com", password: "sodaStereo", dateOfBirth: "Tue Feb 01 2022" };
+const testUserBase = {
+  name: "John",
+  email: "john@doe.com",
+  password: "sodaStereo",
+  dateOfBirth: "Tue Feb 01 2022",
+};
 
 describe("POST /api/auth/sign-up", () => {
   it("Should return a bad request if no user object is given", (done) => {

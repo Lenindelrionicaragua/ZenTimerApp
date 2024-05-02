@@ -24,9 +24,8 @@ export const findUserInMockDB = async (email) => {
   }
 
   const user = await User.findOne({ email });
-  
+
   const passwordHash = user ? user.password : null;
 
   return { user, passwordHash };
 };
-
