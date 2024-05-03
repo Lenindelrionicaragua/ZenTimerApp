@@ -8,7 +8,7 @@ export const requireAuth = (req, res, next) => {
 
   if (!session) {
     const errorMessage = "Session cookie not found.";
-    // logError(errorMessage);
+    logError(errorMessage);
     return res.status(403).send({ error: errorMessage });
   }
 
